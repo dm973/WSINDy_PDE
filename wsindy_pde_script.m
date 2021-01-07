@@ -91,8 +91,8 @@ end
 %% Display results
 
 print_loc = 1;
-toggle_plot_basis_fcn = 0; 
-toggle_plot_sol = 0; 
+toggle_plot_basis_fcn = 1; 
+toggle_plot_sol = 1; 
 toggle_plot_loss = 1; 
 
 if print_loc~=0
@@ -101,15 +101,15 @@ end
 
 if toggle_plot_basis_fcn
     figure(1);
-    plot_basis_fcn(Cfs_x,Cfs_t,m_x,dx,m_t,dt,max_dx,max_dt,pdx_list,[1000 5 1400 700],scales(end-nstates:end));
+    plot_basis_fcn(Cfs_x,Cfs_t,m_x,dx,m_t,dt,max_dx,max_dt,pdx_list,[],scales(end-nstates:end));
 end
 
 if and(toggle_plot_sol,dim==2)
-    figure(2); set(gcf,'position',[1332 537 570 413])
+    figure(2);clf;set(gcf,'units','normalized','outerposition',[0.4 0 0.3 0.45])
     surf(xs{1},xs{2},U_obs{1}', 'EdgeColor','none')
     view([15 55])
-    xlabel('$\lambda$','interpreter','latex','fontsize',14)
-    ylabel('$\mathcal{L}$','interpreter','latex','fontsize',14)
+    xlabel('$x$','interpreter','latex','fontsize',14)
+    ylabel('$t$','interpreter','latex','fontsize',14)
     set(gca, 'TickLabelInterpreter','latex','fontsize',14)
 end
 
