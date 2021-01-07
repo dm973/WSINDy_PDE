@@ -1,7 +1,9 @@
 # WSINDy_PDE: algorithm for identification of PDE systems using the weak form of the dynamics
- 
-use wsindy_pde_script to recreate results in paper below. Sine-Gordon.mat, rxn_diff.mat, 
-Nav_Stokes.mat datasets are too large to upload but can be made available on request.
+
+Use wsindy_pde_script.m to recreate results in paper (https://arxiv.org/abs/2007.02848).
+See wsindy_pde_usersguide.pdf for information wsindy_pde_script.m.
+
+Sine-Gordon.mat, rxn_diff.mat, Nav_Stokes.mat datasets are too large to upload but can be made available on request.
 
 Copyright 2020, All Rights Reserved
 Code by Daniel A. Messenger

@@ -13,7 +13,7 @@
 %%%%%%%%%%%% For Paper, "Weak SINDy for Partial Differential Equations"
 %%%%%%%%%%%% by D. A. Messenger and D. M. Bortz
 
-function [tags,pdx_list,lib_list] = build_fcn_lib_tags(n,dim,max_deriv_x,max_deriv_t,polys,trigs,use_cross_derivs,use_all_pt)
+function [tags,lib_list,pdx_list] = build_fcn_lib_tags(n,dim,max_deriv_x,max_deriv_t,polys,trigs,use_cross_derivs,use_all_dt)
 tags = [];
 for p = 1:length(polys)
     tags = [tags;partitionNk(polys(p),n)];
@@ -23,7 +23,7 @@ for k=1:length(trigs)
     tags = [tags; trig_inds];
 end
 
-if and(use_cross_derivs,use_all_pt)
+if and(use_cross_derivs,use_all_dt)
     inds_grid = cell(dim,1);
     for d=1:dim-1
         inds_grid{d} = 1:max_deriv_x+1;
@@ -37,10 +37,10 @@ if and(use_cross_derivs,use_all_pt)
         pdx_list = [pdx_list pdxs(inds_grid{d},:)];
     end
     pdx_list = [pdx_list pdxs(inds_grid{end},:)];
-elseif and(use_cross_derivs,~use_all_pt)
+elseif and(use_cross_derivs,~use_all_dt)
     inds_grid = cell(dim-1,1);
     for d=1:dim-1
-        inds_grid{d} = 1:max_deriv_x+1;
+        inds_grid{d} = 1:max_deriv_x;
     end
     [inds_grid{:}] = ndgrid(inds_grid{:});
 
@@ -50,7 +50,7 @@ elseif and(use_cross_derivs,~use_all_pt)
         pdx_list = [pdx_list pdxs(inds_grid{d},:)];
     end
     pdx_list = [zeros(1,dim);[pdx_list [max_deriv_t;zeros(size(pdx_list,1)-1,1)]]];
-elseif and(~use_cross_derivs,use_all_pt)    
+elseif and(~use_cross_derivs,use_all_dt)    
     pdx_list = zeros(1,dim);
     for k=1:max_deriv_t                                                        
         pdx_list = [pdx_list;[zeros(1,dim-1) k]];
@@ -60,7 +60,7 @@ elseif and(~use_cross_derivs,use_all_pt)
             pdx_list = [pdx_list;[zeros(1,k-1) j zeros(1,dim-k)]];
         end
     end
-elseif and(~use_cross_derivs,~use_all_pt)
+elseif and(~use_cross_derivs,~use_all_dt)
     pdx_list = zeros(1,dim);
     pdx_list = [pdx_list;[zeros(1,dim-1) max_deriv_t]];
     for k=1:dim-1
