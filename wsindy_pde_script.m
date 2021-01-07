@@ -13,12 +13,12 @@
 
 clc; clear all; close all;
 
-pde_num = 7;
+pde_num = 1;
 pde_names = {'burgers.mat','KdV.mat','KS.mat','NLS.mat','Sine_Gordon.mat','rxn_diff','Nav_Stokes.mat','SG_exact.mat'};
 load(['datasets/',pde_names{pde_num}])
 
 coarsen_data = [[1 1];[1 1];[1 1]];
-sigma_NR = 0.2; 
+sigma_NR = 0.5; 
 noise_dist = 0; 
 noise_alg = 0;
 rng('shuffle');
@@ -47,17 +47,17 @@ dim = length(dims);
 
 % m_x = 20;
 % m_t = 12;
-s_x = floor(length(xs{1})/20);
-s_t = floor(length(xs{end})/20);
-% phi_class = 1;
-% tau = 10^-10;
-%tauhat = 0.8;
-%toggle_scale = 2;
+s_x = floor(length(xs{1})/50);
+s_t = floor(length(xs{end})/50);
+phi_class = 1;
+tau = 10^-10;
+tauhat = 0;
+toggle_scale = 2;
 
 %---------------- regularized least squares solve
 
-%lambda = 10.^(linspace(-4,0,50));
-%gamma = 0;
+lambda = 10.^(linspace(-4,0,50));
+gamma = 0;
 
 %---------------- model library
 
@@ -67,9 +67,9 @@ s_t = floor(length(xs{end})/20);
 % trigs = [1];
 % use_all_dt = 0;
 % use_cross_dx = 0;
-
-%true_nz_weights={[]}; 
-%lhs= [1 0 0 2];
+% 
+% true_nz_weights={[]}; 
+% lhs= [1 0 0 2];
 % custom_add = [];
 % custom_remove = [];
 
@@ -91,8 +91,8 @@ end
 %% Display results
 
 print_loc = 1;
-toggle_plot_basis_fcn = 1; 
-toggle_plot_sol = 1; 
+toggle_plot_basis_fcn = 0; 
+toggle_plot_sol = 0; 
 toggle_plot_loss = 1; 
 
 if print_loc~=0
