@@ -24,9 +24,9 @@ for n= 1:length(U_obs)
         elseif opt==1
             mstar1 = sqrt(3)/pi*N/2/k*tauhat;
             mstar2 = 1/pi*tauhat*(N/2)/k*sqrt(log(exp(1)^3/tau^8));
-            mnew = fzero(@(m)l(m,k,N), [mstar1 mstar2]); 
+            mnew = fzero(@(m)l(m,k,N), [mstar1 mstar2]);
             if mnew>N/2-1
-                mnew = N/2/k;
+                mnew = N/2-1;
             end
         end
         mx = [mx mnew];
@@ -39,7 +39,7 @@ for n= 1:length(U_obs)
     elseif opt ==1
         mnew = fzero(@(m)l(m,k,T), [1 2/sqrt(tau)]); % provably a bracket for [1 (1+sqrt(1-tol))/tol] for all j < certain value
         if mnew>T/2-1
-            mnew = T/2/k;
+            mnew = T/2-1;
         end
     end
     mt = [mt mnew];
@@ -50,8 +50,8 @@ mx = min(floor((L-1)/2),ceil(mean(mx)));
 mt = min(floor((T-1)/2),ceil(mean(mt)));
 
 if opt ==1
-    px = max(max_dx+2,floor(log(tau)/log(1-(1-1/mx)^2)));
-    pt = max(max_dt+2,floor(log(tau)/log(1-(1-1/mt)^2)));
+    px = max(max_dx+1,ceil(log(tau)/log(1-(1-1/mx)^2)));
+    pt = max(max_dt+1,ceil(log(tau)/log(1-(1-1/mt)^2)));
 elseif opt==2
     px = mean(px);
     pt = mean(pt);
@@ -81,8 +81,8 @@ function [corners,sig_est] = findcornerpts(U_obs,xs)
         Ufft = mean(Ufft,2);
         Ufft = cumsum(Ufft);            
         Ufft = Ufft(1:ceil(L/2),:);
-        errs = zeros(NN-6,1);
-        for k=4:NN-3
+        errs = zeros(NN-2,1);
+        for k=2:NN-1
            subinds1 = 1:k;
            subinds2 = k:NN;
            Ufft_av1 = Ufft(subinds1);
@@ -91,11 +91,11 @@ function [corners,sig_est] = findcornerpts(U_obs,xs)
            m2 = range(Ufft_av2)/range(xx(subinds2));
            L1 = min(Ufft_av1)+m1*(xx(subinds1)-xx(1));
            L2 = max(Ufft_av2)+m2*(xx(subinds2)-xx(end));
-           errs(k-3) = sqrt(sum(((L1-Ufft_av1)./Ufft_av1).^2) + sum(((L2-Ufft_av2)./Ufft_av2).^2)); % relative l2 
+           errs(k-1) = sqrt(sum(((L1-Ufft_av1)./Ufft_av1).^2) + sum(((L2-Ufft_av2)./Ufft_av2).^2)); % relative l2 
         end
         [~,tstarind] = min(errs);
         tstar = -xx(tstarind);
-        corners{d} = [tstar NN-tstarind-3];
+        corners{d} = [tstar max(NN-tstarind-3,1)];
     end
     Ufft = abs(fftshift(fft(permute(U_obs,shift))));
     Ufft = Ufft([1:tstarind-3 2*NN-tstarind+2:end],:);

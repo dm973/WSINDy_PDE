@@ -18,7 +18,7 @@ pde_names = {'burgers.mat','KdV.mat','KS.mat','NLS.mat','Sine_Gordon.mat','rxn_d
 load(['datasets/',pde_names{pde_num}])
 
 coarsen_data = [[1 1];[1 1];[1 1]];
-sigma_NR = 0.5; 
+sigma_NR = 0.2; 
 noise_dist = 0; 
 noise_alg = 0;
 rng('shuffle');
@@ -51,7 +51,7 @@ s_x = floor(length(xs{1})/50);
 s_t = floor(length(xs{end})/50);
 phi_class = 1;
 tau = 10^-10;
-tauhat = 0;
+tauhat = 2;
 toggle_scale = 2;
 
 %---------------- regularized least squares solve
@@ -61,21 +61,21 @@ gamma = 0;
 
 %---------------- model library
 
-% max_dx = 4;
-% max_dt = 1;
-% polys = 0:3;
-% trigs = [1];
-% use_all_dt = 0;
-% use_cross_dx = 0;
-% 
-% true_nz_weights={[]}; 
+max_dx = 2;
+max_dt = 1;
+polys = 0:3;
+trigs = [];
+use_all_pt = 0;
+use_cross_dx = 0;
+ 
+% true_nz_weights={[]};
 % lhs= [1 0 0 2];
-% custom_add = [];
-% custom_remove = [];
+custom_add = [];
+custom_remove = [];
 
 %---------------- find test function hyperparameters from tau,tauhat
 
-if tauhat >0
+if tauhat > 0
     [m_x,m_t,p_x,p_t,sig_est,corners_all] = findcorners(U_obs,xs,tau,tauhat,max_dx,max_dt,phi_class);
     tols = [-p_x -p_t];
 else
@@ -91,7 +91,7 @@ end
 %% Display results
 
 print_loc = 1;
-toggle_plot_basis_fcn = 1; 
+toggle_plot_basis_fcn = 0; 
 toggle_plot_sol = 1; 
 toggle_plot_loss = 1; 
 
